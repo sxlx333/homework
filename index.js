@@ -37,22 +37,64 @@ function shoppingList (a) {
         return 'Šiuo metu, jūsų prekių krepšelis yra tuščias.';
     }
 
+
+    const totalItems = a.length; // Calculate the total number of items (3 objects in array called firstShoppingList)
+    const itemWord = totalItems === 1 ? 'prekė' : 'prekės';        // PANAUDOTI 
+    const introLine = `Jūsų prekių krepšelyje yra ${totalItems} ${itemWord}:`; // Dynamic introLine: The introLine uses itemWord to ensure that the message uses the correct form of the word.
+    const headerLine = 'Pavadinimas | Kiekis | Vieneto kaina | Viso mokėti';
+
+
+
+
+
+
+
+
+
+
 // Function to format the output
+/*The map() method is used to create a new array by applying a function to each element in the original array (list).
+In this case, item refers to each object in the list array as map() iterates over it.*/
 function formatShoppingList(list) {
-    return list.map(item => { /*The map() method is used to create a new array by applying a function to each element in the original array (list).
-        In this case, item refers to each object in the list array as map() iterates over it.*/
-        const priceInEur = (item.unitPrice / 100).toFixed(2); // Convert cent to Euro
-        return `${item.id}. ${item.name} | ${item.amount} vnt | ${priceInEur} Eur`;
-    }).join('\n');
+    return list.map((item, index)  => { 
+        const unitPriceInEur = (item.unitPrice / 100).toFixed(2); // Convert cent to Euro and make fixed value - show 2 numbers after dot(two decimal places)
+        const totalPrice = ((item.amount * item.unitPrice) / 100).toFixed(2); // Calculate totalPrice in euros
+        return `${index + 1}. ${item.name} | ${item.amount} vnt | ${unitPriceInEur} Eur | ${totalPrice} Eur`;
+    });
 }
-// The function returns a formatted string where each item in the array is presented in a specific format with its id, name, amount, and unitPrice (converted from cents to euros).
-const formattedOutput = formatShoppingList(firstShoppingList);
+// The function returns a formatted string where each item in the array is presented in a specific format with it's position in the array not their ID, name, amount, and unitPrice (converted from cents to euros).
 
 
-    return formattedOutput;  // PATOBULINTI FUNKCIJA SHOPPING LIST
+
+
+const formattedLines = formatShoppingList(a);
+
+// Determine the maximum line length for generating the hyphen line
+const lines = [introLine, headerLine, ...formattedLines];
+const maxLength = Math.max(...lines.map(line => line.length));
+
+const hyphenLine = '-'.repeat(maxLength);
+
+// Combine all parts of the output
+const finalTableOutput = `
+${introLine}
+${hyphenLine}
+${headerLine}
+${hyphenLine}
+${formattedLines.join('\n')}
+${hyphenLine}
+`;
+
+    return finalTableOutput.trim(); // trim to remove any unnecessary leading.trailing whitespace
+
 };
 
- console.log(shoppingList(firstShoppingList));
+console.log('pirma funkcija');
+console.log(shoppingList(firstShoppingList));
+console.log('');
+
+//  console.log('');
+//  console.log('**********************************************');
 
 /********************TESTINIMAS************************** */
 
@@ -87,100 +129,79 @@ function productDetails (a, b) {
     // Check if the number 'b' corresponds to an 'id' in the array 'a'. IF statement uses some() to check if any object in the array has an id property that is a number and matches b.
     if (!a.some(item => typeof item.id === 'number' && item.id === b)) {
         return `Prekė, su ID: ${b} neegzistuoja.`;
-    } else {
-    return 'teisinga'; // patobutinti funkcija
+    } 
+
+    // Nested function to format and display the product details
+
+    function formatProductDetails(product) {
+        const headers = [
+            'ID',
+            'Pavadinimas',
+            'Kiekis',
+            'Vieneto kaina',
+            'Viso mokėti'
+        ];
+
+        const details = [
+            product.id.toString(),
+            product.name,
+            `${product.amount} vnt`,
+            `${(product.unitPrice / 100).toFixed(2)} Eur`,
+            `${((product.amount * product.unitPrice) / 100).toFixed(2)} Eur`
+        ];
+
+        // calculate the maximum width for each column
+        const maxLengths = headers.map((header, i) => 
+            Math.max(header.length, details[i].length)
+        );
+
+        // create the formatted lines
+        const formattedLines = headers.map((header, i) =>
+            `${header} | ${details[i]}`
+        );
+
+        // calculate the maximum line length for dynamic hyphenation
+        const maxLength = Math.max(...formattedLines.map(line => line.length));
+        const hyphenLine = '-'.repeat(maxLength);
+
+
+        // construct the final output
+
+        return `
+${hyphenLine}
+Prekės informacija
+${hyphenLine}
+${formattedLines.join('\n')}
+${hyphenLine}
+        `.trim();
     }
-};
-// console.log('1.', productDetails('a'));
-// console.log('2.', productDetails('a', 1));
-// console.log('3.',productDetails([], 1));
-// console.log('4.',productDetails([Infinity, {}], 1));
-// console.log('5.',productDetails([{name: 'Jonas'}], 1));
-// console.log('6.',productDetails(firstShoppingList, 1));
-// console.log('------------test su b reiksme---------------');
-// console.log('1.', productDetails([{name: 'Petras', age: 99}]));
-// console.log('2.', productDetails([{name: 'Petras', age: 99}], 'a'));
-// console.log('3.', productDetails(firstShoppingList, {}));
-// console.log('4.', productDetails(firstShoppingList, NaN));
-// console.log('5.', productDetails(firstShoppingList, Infinity)); 
-// console.log('6.', productDetails(firstShoppingList, [1, 2, 3]));
-// console.log('7.', productDetails(firstShoppingList, 42069));
-// console.log('8.', productDetails(firstShoppingList, 1));
 
+    // find the product by ID
+    const product = a.find(item => item.id === b);
 
+    // return the formatted product details
+    return formatProductDetails(product);
+}
 
-
-
-
-
-
-
-
-
-// console.log(shoppingList(firstShoppingList));
-// /*
-// Jūsų prekių krepšelyje yra 3 prekės:
-// -----------------------------------------------------------
-// Pavadinimas  | Kiekis      | Vieneto kaina | Viso mokėti
-// -----------------------------------------------------------
-// 1. Pomidoras | 1000000 vnt | 1.99 Eur      | 1990000.00 Eur
-// 2. Agurkas   | 2 vnt       | 0.50 Eur      | 1.00 Eur
-// 3. Svogūnas  | 1 vnt       | 0.45 Eur      | 0.45 Eur
-// -----------------------------------------------------------
-// */
-
-// console.log(productDetails(firstShoppingList, 42069));
-// /*
-// Prekė, su ID: 42069 neegzistuoja.
-// */
-
+// console.log('------antroji funkcija------');
 // console.log(productDetails(firstShoppingList, 1));
-// /*
-// ------------------------------
-// Prekės informacija
-// ------------------------------
-// ID            | 1
-// Pavadinimas   | Pomidoras
-// Kiekis        | 1000000 vnt
-// Vieneto kaina | 1.99 Eur
-// Viso mokėti   | 1990000.00 Eur
-// ------------------------------
-// */
-
+// console.log(productDetails(firstShoppingList, 2));
 // console.log(productDetails(firstShoppingList, 3));
-// /*
-// ------------------------
-// Prekės informacija
-// ------------------------
-// ID            | 3
-// Pavadinimas   | Agurkas
-// Kiekis        | 2 vnt
-// Vieneto kaina | 0.50 Eur
-// Viso mokėti   | 1.00 Eur
-// ------------------------
-// */
-
 // console.log(productDetails(firstShoppingList, 7));
-// /*
-// ------------------------
-// Prekės informacija
-// ------------------------
-// ID            | 7
-// Pavadinimas   | Svogūnas
-// Kiekis        | 1 vnt
-// Vieneto kaina | 0.45 Eur
-// Viso mokėti   | 0.45 Eur
-// ------------------------
-// */
 
-// const singleProductShoppingList = [
-//     {
-//         id: 2,
-//         name: 'Kivi',
-//         amount: 23,
-//         unitPrice: 14,
-//     },
-// ];
+
+
+const singleProductShoppingList = [
+    {
+        id: 2,
+        name: 'Kivi',
+        amount: 23,
+        unitPrice: 14,
+    },
+];
+
+
+console.log(shoppingList(singleProductShoppingList));
 
 // console.log(shoppingList(singleProductShoppingList));
 // /*
