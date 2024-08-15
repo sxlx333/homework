@@ -1,4 +1,4 @@
-function productDetails (a, b) {
+export function productDetails(a, b) {
     if (arguments.length !== 2) {   
         return 'Ši funkcija reikalauja įvesti tiksliai 2 kintamuosius';
     }
