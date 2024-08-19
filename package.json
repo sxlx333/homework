@@ -4,8 +4,6 @@
   "type":"module",  
   "main": "index.js",
   "scripts": {
-    "product": "node --watch ./js/productDetails.js",
-    "list": "node --watch ./js/shoppingList.js",
     "dev": "node --watch ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,7 +11,5 @@
   "author": "Vilius, https://github.com/sxlx333",
   "license": "ISC",
   "description": "",
-  "devDependencies": {
-    "dead-server": "^1.0.9"
-  }
+  "devDependencies": {}
 }
