@@ -4,7 +4,6 @@ import { productDetails } from "./js/productDetails.js";
 const emptyList = [];
 
 console.log(shoppingList(emptyList));
-
 console.log(productDetails(emptyList, 42069));
 
 const firstShoppingList = [
@@ -29,13 +28,9 @@ const firstShoppingList = [
 ];
 
 console.log(shoppingList(firstShoppingList));
-
 console.log(productDetails(firstShoppingList, 42069));
-
 console.log(productDetails(firstShoppingList, 1));
-
 console.log(productDetails(firstShoppingList, 3));
-
 console.log(productDetails(firstShoppingList, 7));
 
 const singleProductShoppingList = [
@@ -48,7 +43,5 @@ const singleProductShoppingList = [
 ];
 
 console.log(shoppingList(singleProductShoppingList));
-
 console.log(productDetails(singleProductShoppingList, 42069));
-
 console.log(productDetails(singleProductShoppingList, 2));
